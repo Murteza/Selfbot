@@ -41,7 +41,7 @@ const { spawn, exec, execSync } = require("child_process")
 const speed = require('performance-now')
 const chalk = require('chalk');
 const cfonts = require('cfonts');
-const color = (text, color) => {
+const colorrs = (text, color) => {
     return !color ? chalk.green(text) : chalk.keyword(color)(text)
 const vcard = 'BEGIN:VCARD\n'
             + 'VERSION:3.0\n'
@@ -83,15 +83,15 @@ async function starts() {
     HLX.logger.level = 'warn'
     console.log(banner.string)
 	HLX.on('qr', () => {
-        console.log(color (`Scan Qr Code`, 'aqua'))
+        console.log(colorrs (`Scan Qr Code`, 'aqua'))
     })
     
 	fs.existsSync('./session.json') && HLX.loadAuthInfo('./session.json')
 	HLX.on('connecting', () => {
-		console.log(color ('⚠ Connecting...', 'red'))
+		console.log(colorrs ('⚠ Connecting...', 'red'))
 	})
 	HLX.on('open', () => {
-		console.log(color ('Connected ♥️', 'green'))
+		console.log(colorrs ('Connected ♥️', 'green'))
 	})
 	await HLX.connect({timeoutMs: 30*1000})
     fs.writeFileSync('./session.json', JSON.stringify(HLX.base64EncodedAuthInfo(), null, '\t'))
