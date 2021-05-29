@@ -41,15 +41,7 @@ const { spawn, exec, execSync } = require("child_process")
 const speed = require('performance-now')
 const chalk = require('chalk');
 const cfonts = require('cfonts');
-const colorrs = (text, color) => {
-    return !color ? chalk.green(text) : chalk.keyword(color)(text)
-}
-const vcard = 'BEGIN:VCARD\n'
-            + 'VERSION:3.0\n'
-            + 'FN:AhmadHLX\n' // Change To Your Name
-            + 'ORG:Creator SELF BOT;\n'
-            + 'TEL;type=CELL;type=VOICE;waid=6283873394995:+62 838-7339-4995\n' // CHANGE YOUR NUMBER
-            + 'END:VCARD'
+
 //Settings
 publik = false
 fake = setting.fake
@@ -60,7 +52,12 @@ alasanoff = 'Tidur'
 lol = setting.lol
 zeks = setting.zeks
 imgbb_key = setting.imgbb_key
-
+const vcard = 'BEGIN:VCARD\n'
+            + 'VERSION:3.0\n'
+            + 'FN:AhmadHLX\n' // Change To Your Name
+            + 'ORG:Creator SELF BOT;\n'
+            + 'TEL;type=CELL;type=VOICE;waid=6283873394995:+62 838-7339-4995\n' // CHANGE YOUR NUMBER
+            + 'END:VCARD'
 //finction
 function kyun(seconds) {
 function pad(s) {
@@ -1462,5 +1459,4 @@ case 'getvn':
 		console.log('%s', color(e, 'green'))
 	}
 }) 
-}
 start() 
