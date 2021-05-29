@@ -70,19 +70,29 @@ return (s < 10 ? '0' : '') + s;
 }
 const zaknew = fs.readFileSync('./dns/zaknew.jpg')
 async function starts() {
-	const HLX = new WAConnection()
-	HLX.logger.level = 'warn'
+    const HLX = new WAConnection()
+    const banner = cfonts.render(('Ahmad Zaky|X|Santy_Gz|SelfbotHLX'), {
+        font: 'block',
+        color: 'candy',
+        align: 'center',
+        gradient: ["red","cyan"],
+        lineHeight: 1
+      });
+    HLX.logger.level = 'warn'
+    console.log(banner.string)
 	HLX.on('qr', () => {
-		console.log(color('[','white'), color('!','red'), color(']','white'), color(' Scan the qr code above'))
-	})
-
+        console.log(color (`Scan Qr Code`, 'aqua'))
+    })
+    
 	fs.existsSync('./session.json') && HLX.loadAuthInfo('./session.json')
 	HLX.on('connecting', () => {
-		start('2', 'Connecting...')
+		console.log(color ('⚠ Connecting...', 'red'))
 	})
 	HLX.on('open', () => {
-		success('2', '[BOT] BOT is now online!')
+		console.log(color ('Connected ♥️', 'green'))
 	})
+	await HLX.connect({timeoutMs: 30*1000})
+    fs.writeFileSync('./session.json', JSON.stringify(HLX.base64EncodedAuthInfo(), null, '\t'))
 	await HLX.connect({timeoutMs: 30*1000})
     fs.writeFileSync('./session.json', JSON.stringify(HLX.base64EncodedAuthInfo(), null, '\t'))
     
