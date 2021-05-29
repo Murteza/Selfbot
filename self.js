@@ -1,4 +1,4 @@
-//©Ahmadzakix
+//©AhmadHLXx
 //©Santy_gz
 const
 	    {
@@ -45,7 +45,7 @@ const colorrs = (text, color) => {
     return !color ? chalk.green(text) : chalk.keyword(color)(text)
 const vcard = 'BEGIN:VCARD\n'
             + 'VERSION:3.0\n'
-            + 'FN:Ahmadzaki\n' // Change To Your Name
+            + 'FN:AhmadHLX\n' // Change To Your Name
             + 'ORG:Creator SELF BOT;\n'
             + 'TEL;type=CELL;type=VOICE;waid=6283873394995:+62 838-7339-4995\n' // CHANGE YOUR NUMBER
             + 'END:VCARD'
@@ -72,19 +72,17 @@ return (s < 10 ? '0' : '') + s;
 }
 const zaknew = fs.readFileSync('./dns/zaknew.jpg')
 async function starts() {
-
-	const zaki = new WAConnection()
-
-	zaki.logger.level = 'warn'
-	zaki.on('qr', () => {
+	const HLX = new WAConnection()
+	HLX.logger.level = 'warn'
+	HLX.on('qr', () => {
 		console.log(color('[','white'), color('!','red'), color(']','white'), color(' Scan the qr code above'))
 	})
 
-	fs.existsSync('./session.json') && zaki.loadAuthInfo('./session.json')
-	zaki.on('connecting', () => {
+	fs.existsSync('./session.json') && HLX.loadAuthInfo('./session.json')
+	HLX.on('connecting', () => {
 		start('2', 'Connecting...')
 	})
-	zaki.on('open', () => {
+	HLX.on('open', () => {
 		success('2', '[BOT] BOT is now online!')
 	})
 	await HLX.connect({timeoutMs: 30*1000})
@@ -337,9 +335,9 @@ _*Hlxbotself*_`)
 ╭───❲ INFO ABOUT ❳──────
 │ *Group Bot 1* : https://chat.whatsapp.com/JNxkmhX2nzvAUx50IbBs1j
 │ *Group Bot 2* : https://chat.whatsapp.com/Faz1qmFp1i8LjnTxjeDPnL
-│❏ *IG* : https://Instagram.com/ahmadzaki_yo
-│❏ *GITHUB* : https://github.com/Ahmadzakix
-│❏ *REST API* : https://docs-api-zaki.herokuapp.com
+│❏ *IG* : https://Instagram.com/ahmadHLX_yo
+│❏ *GITHUB* : https://github.com/AhmadHLXx
+│❏ *REST API* : https://docs-api-HLX.herokuapp.com
 ╰────────────────────
 
 ╭──────❲ INFO BOT ❳─────
