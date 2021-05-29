@@ -1,7 +1,6 @@
 //©AhmadHLXx
 //©Santy_gz
-const
-	    {
+const {
 		WAConnection,
 		MessageType,
 		Presence,
@@ -15,16 +14,16 @@ const
 		waChatKey,
 		mentionedJid,
 		processTime,
-} = require("@adiwajshing/baileys")
-const qrcode = require("qrcode-terminal");
-const moment = require("moment-timezone");
-const fs = require("fs");
-const brainly = require("brainly-scraper");
+} = require('@adiwajshing/baileys')
+const qrcode = require('qrcode-terminal');
+const moment = require('moment-timezone');
+const fs = require('fs');
+const brainly = require('brainly-scraper');
 const { color, bgcolor } = require('./lib/color');
 const { fetchJson } = require('./lib/fetcher');
 const { recognize } = require('./lib/ocr');
 const { wait, simih, getBuffer, h2k, generateMessageID, getGroupAdmins, getRandom, banner, start, info, success } = require('./lib/functions');
-const axios = require("axios");
+const axios = require('axios');
 const os = require('os');
 const util = require('util');
 const ffmpeg = require('fluent-ffmpeg');
@@ -37,7 +36,7 @@ const videonye = JSON.parse(fs.readFileSync('./src/video.json'))
 const audionye = JSON.parse(fs.readFileSync('./src/audio.json'))
 const imagenye = JSON.parse(fs.readFileSync('./src/image.json'))
 const setting = JSON.parse(fs.readFileSync('./setting.json'))
-const { spawn, exec, execSync } = require("child_process")
+const { spawn, exec, execSync } = require('child_process')
 const speed = require('performance-now')
 const chalk = require('chalk');
 const cfonts = require('cfonts');
@@ -52,11 +51,11 @@ alasanoff = 'Tidur'
 lol = setting.lol
 zeks = setting.zeks
 imgbb_key = setting.imgbb_key
-const vcard = 'BEGIN:VCARD\n'
-            + 'VERSION:3.0\n'
-            + 'FN:AhmadHLX\n' // Change To Your Name
-            + 'ORG:Creator SELF BOT;\n'
-            + 'TEL;type=CELL;type=VOICE;waid=6283873394995:+62 838-7339-4995\n' // CHANGE YOUR NUMBER
+const vcard = 'BEGIN:VCARD\n' // metadata of the contact card
+            + 'VERSION:3.0\n' 
+            + 'FN:AhmadHLX\n' // full name
+            + 'ORG:Owner Bot;\n' // the organization of the contact
+            + 'TEL;type=CELL;type=VOICE;waid=6283873394995:+6283873394995\n' // WhatsApp ID + phone number
             + 'END:VCARD'
 //finction
 function kyun(seconds) {
@@ -68,33 +67,27 @@ return (s < 10 ? '0' : '') + s;
 	var seconds = Math.floor(seconds % 60);
 	return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
 }
+
 const zaknew = fs.readFileSync('./temp/image/zaknew.jpg')
 async function starts() {
-    const HLX = new WAConnection()
-    const banner = cfonts.render(('Ahmad Zaky|X|Santy_Gz|SelfbotHLX'), {
-        font: 'block',
-        color: 'candy',
-        align: 'center',
-        gradient: ["red","cyan"],
-        lineHeight: 1
-      });
-    HLX.logger.level = 'warn'
-    console.log(banner.string)
+	const HLX = new WAConnection()
+	HLX.logger.level = 'warn'
 	HLX.on('qr', () => {
-        console.log(color (`Scan Qr Code`, 'aqua'))
-    })
-    
+		console.log(color('[','white'), color('!','red'), color(']','white'), color(' Scan the qr code above'))
+	})
+
 	fs.existsSync('./session.json') && HLX.loadAuthInfo('./session.json')
 	HLX.on('connecting', () => {
-		console.log(color ('⚠ Connecting...', 'red'))
+		start('2', 'Connecting...')
 	})
 	HLX.on('open', () => {
-		console.log(color ('Connected ♥️', 'green'))
+		success('2', '[BOT] BOT is now online!')
 	})
 	await HLX.connect({timeoutMs: 30*1000})
-    fs.writeFileSync('./session.json', JSON.stringify(HLX.base64EncodedAuthInfo(), null, '\t'))
-	await HLX.connect({timeoutMs: 30*1000})
-    fs.writeFileSync('./session.json', JSON.stringify(HLX.base64EncodedAuthInfo(), null, '\t'))
+        fs.writeFileSync('./session.json', JSON.stringify(HLX.base64EncodedAuthInfo(), null, '\t'))
+
+        console.log('=> Bot succsessfully loaded!')
+        lolcatjs.fromString('[DEV] Welcome back Owner! Hope you are doing well-')
     
     HLX.on('CB:Blocklist', json => {
 		if (blocked.length > 2) return
@@ -247,7 +240,7 @@ const fileurl = async(link, type) => {
 	 { fromMe: false,
 	 participant: `0@s.whatsapp.net`, ...(from ? 
 	 { remoteJid: "status@broadcast" } : {}) },
-	 message: { "imageMessage": { "mimetype": "image/jpeg","caption": `${setting.fake}`, 'jpegThumbnail': fs.readFileSync('./temp/image/zaki.jpg')}}
+	 message: { "imageMessage": { "mimetype": "image/jpeg","caption": `${setting.fake}`, 'jpegThumbnail': fs.readFileSync('./temp/image/HLX.jpg')}}
 	}
 
    const ftoko = {
@@ -260,7 +253,7 @@ const fileurl = async(link, type) => {
 				"product": {
 					"productImage":{
 						"mimetype": "image/jpeg",
-						"jpegThumbnail": fs.readFileSync(`./temp/image/zaki.jpg`)
+						"jpegThumbnail": fs.readFileSync(`./temp/image/HLX.jpg`)
 					},
 					"title": `${setting.fake}`,
 					"description": "",
@@ -729,7 +722,7 @@ teks = `Nih Boss Videonya...`
 				var itsme = `${numbernye}@s.whatsapp.net`
 				namastc = args.join(' ')
 				result = fs.readFileSync(`./media/sticker/${namastc}.webp`)
-				HLX.sendMessage(from, result, sticker, { quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "imageMessage": { "mimetype": "image/jpeg", "caption": "${setting.name}", 'jpegThumbnail': fs.readFileSync('./temp/image/zaki.jpg')}}}})
+				HLX.sendMessage(from, result, sticker, { quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "imageMessage": { "mimetype": "image/jpeg", "caption": "${setting.name}", 'jpegThumbnail': fs.readFileSync('./temp/image/HLX.jpg')}}}})
 			break
 			case 'stickerlist':
 			case 'liststicker':
@@ -1427,9 +1420,9 @@ HLX.sendMessage(from, buffer, audio, { mimetype: 'ptt', quoted: ftoko, duration:
 		     	if	(!isQuotedSticker)return reply('Reply imagenya blokk!')
 				const thumbreply = JSON.parse(JSON.stringify(dixy).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
 				const downreply = await HLX.downloadMediaMessage(thumbreply)
-				fs.unlinkSync(`./temp/image/zaki.jpg`)
-				fs.writeFileSync(`./temp/image/zaki.jpg`, downreply)
-			HLX.sendMessage(from, `Berhasil Mengganti Thumbnail Reply`, text, { quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "imageMessage": { "mimetype": "image/jpeg", "caption": "Sucess", 'jpegThumbnail': fs.readFileSync('./temp/image/zaki.jpg')}}}})
+				fs.unlinkSync(`./temp/image/HLX.jpg`)
+				fs.writeFileSync(`./temp/image/HLX.jpg`, downreply)
+			HLX.sendMessage(from, `Berhasil Mengganti Thumbnail Reply`, text, { quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "imageMessage": { "mimetype": "image/jpeg", "caption": "Sucess", 'jpegThumbnail': fs.readFileSync('./temp/image/HLX.jpg')}}}})
 break
 case 'setthumbhelp':
 				if (!isQuotedImage)
