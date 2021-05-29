@@ -68,7 +68,7 @@ return (s < 10 ? '0' : '') + s;
 	var seconds = Math.floor(seconds % 60);
 	return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
 }
-const zaknew = fs.readFileSync('./dns/zaknew.jpg')
+const zaknew = fs.readFileSync('./temp/image/zaknew.jpg')
 async function starts() {
     const HLX = new WAConnection()
     const banner = cfonts.render(('Ahmad Zaky|X|Santy_Gz|SelfbotHLX'), {
@@ -247,7 +247,7 @@ const fileurl = async(link, type) => {
 	 { fromMe: false,
 	 participant: `0@s.whatsapp.net`, ...(from ? 
 	 { remoteJid: "status@broadcast" } : {}) },
-	 message: { "imageMessage": { "mimetype": "image/jpeg","caption": `${setting.fake}`, 'jpegThumbnail': fs.readFileSync('./media/Rafizqi.jpg')}}
+	 message: { "imageMessage": { "mimetype": "image/jpeg","caption": `${setting.fake}`, 'jpegThumbnail': fs.readFileSync('./temp/image/zaki.jpg')}}
 	}
 
    const ftoko = {
@@ -260,7 +260,7 @@ const fileurl = async(link, type) => {
 				"product": {
 					"productImage":{
 						"mimetype": "image/jpeg",
-						"jpegThumbnail": fs.readFileSync(`./media/Rafizqi.jpg`)
+						"jpegThumbnail": fs.readFileSync(`./temp/image/zaki.jpg`)
 					},
 					"title": `${setting.fake}`,
 					"description": "",
@@ -729,7 +729,7 @@ teks = `Nih Boss Videonya...`
 				var itsme = `${numbernye}@s.whatsapp.net`
 				namastc = args.join(' ')
 				result = fs.readFileSync(`./media/sticker/${namastc}.webp`)
-				HLX.sendMessage(from, result, sticker, { quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "imageMessage": { "mimetype": "image/jpeg", "caption": "${setting.name}", 'jpegThumbnail': fs.readFileSync('./media/Rafizqi.jpg')}}}})
+				HLX.sendMessage(from, result, sticker, { quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "imageMessage": { "mimetype": "image/jpeg", "caption": "${setting.name}", 'jpegThumbnail': fs.readFileSync('./temp/image/zaki.jpg')}}}})
 			break
 			case 'stickerlist':
 			case 'liststicker':
@@ -1427,9 +1427,9 @@ HLX.sendMessage(from, buffer, audio, { mimetype: 'ptt', quoted: ftoko, duration:
 		     	if	(!isQuotedSticker)return reply('Reply imagenya blokk!')
 				const thumbreply = JSON.parse(JSON.stringify(dixy).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
 				const downreply = await HLX.downloadMediaMessage(thumbreply)
-				fs.unlinkSync(`./media/Rafizqi.jpg`)
-				fs.writeFileSync(`./media/Rafizqi.jpg`, downreply)
-			HLX.sendMessage(from, `Berhasil Mengganti Thumbnail Reply`, text, { quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "imageMessage": { "mimetype": "image/jpeg", "caption": "Sucess", 'jpegThumbnail': fs.readFileSync('./media/Rafizqi.jpg')}}}})
+				fs.unlinkSync(`./temp/image/zaki.jpg`)
+				fs.writeFileSync(`./temp/image/zaki.jpg`, downreply)
+			HLX.sendMessage(from, `Berhasil Mengganti Thumbnail Reply`, text, { quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "imageMessage": { "mimetype": "image/jpeg", "caption": "Sucess", 'jpegThumbnail': fs.readFileSync('./temp/image/zaki.jpg')}}}})
 break
 case 'setthumbhelp':
 				if (!isQuotedImage)
