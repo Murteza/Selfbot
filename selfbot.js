@@ -1468,5 +1468,6 @@ case 'getvn':
 	} catch (e) {
 		console.log('%s', color(e, 'green'))
 	}
-}) 
+})
+}
 start() 
