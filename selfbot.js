@@ -1,5 +1,5 @@
 //HAI NAMAKU ZAKI AKU SEDANG MENCOBA MEMBUAT SELFBOT DAN PASTI BANYAK YANG COPY PASTE DISINI//
-//***********LOAD MODULE****************//
+//***********LOAD MODULE***************//
 const
 	    {
 		WAConnection,
@@ -44,7 +44,7 @@ const audionye = JSON.parse(fs.readFileSync('./src/audio.json'))
 const imagenye = JSON.parse(fs.readFileSync('./src/image.json'))
 const setting = JSON.parse(fs.readFileSync('./setting.json'))
 
-//************SETTINGS******************//
+//************SETTINGS*****************//
 publik = false
 prefix = setting.prefix
 fake = setting.fake
@@ -62,7 +62,7 @@ const vcard = 'BEGIN:VCARD\n'  // Jan diubah,Ntar Error
             + 'TEL;type=CELL;type=VOICE;waid=6283873394995:+6283873394995\n'  // Ganti jadi nomormu, tapi jangan ubah pomekya
             + 'END:VCARD' // Jan diubah,Ntar Error
 
-//*************FUNTION******************//
+//*************FUNTION*****************//
 function kyun(seconds){
   function pad(s){
     return (s < 10 ? '0' : '') + s;
@@ -77,28 +77,32 @@ function kyun(seconds){
 const zakinew = fs.readFileSync('./temp/image/zakinew.jpeg')
 
 async function starts() {
-	const zaki = new WAConnection()
-	zaki.logger.level = 'warn'
+    const zaki = new WAConnection()
+    const banner = cfonts.render(('Ahmad Zaky|X|Santy_Gz|Selfbotzaki'), {
+        font: 'block',
+        color: 'candy',
+        align: 'center',
+        gradient: ["red","cyan"],
+        lineHeight: 1
+      });
+    zaki.logger.level = 'warn'
+    console.log(banner.string)
 	zaki.on('qr', () => {
-		console.log(color('[','white'), color('!','red'), color(']','white'), color(' Scan the qr code above'))
-	})
-
+        console.log(color (`Scan Qr Code`, 'aqua'))
+    })
+    
 	fs.existsSync('./session.json') && zaki.loadAuthInfo('./session.json')
 	zaki.on('connecting', () => {
-		start('2', 'Connecting...')
+		console.log(color ('⚠ Connecting...', 'red'))
 	})
 	zaki.on('open', () => {
-		success('2', '[BOT] BOT is now online!')
+		console.log(color ('Connected ♥️', 'green'))
 	})
 	await zaki.connect({timeoutMs: 30*1000})
-        fs.writeFileSync('./session.json', JSON.stringify(zaki.base64EncodedAuthInfo(), null, '\t'))
-        console.log('=> Bot succsessfully loaded!')
-        lolcatjs.fromString('[DEV] Welcome back Owner! Hope you are doing well-')
-        
-      zaki.on('CB:Blocklist', json => {
-
+    fs.writeFileSync('./session.json', JSON.stringify(zaki.base64EncodedAuthInfo(), null, '\t'))
+         
+ zaki.on('CB:Blocklist', json => {
 	if (blocked.length > 2) return
-
 	for (let i of json[1].blocklist) {
 		blocked.push(i.replace('c.us', 's.whatsapp.net'))
 	}
@@ -312,7 +316,7 @@ const fileurl = async(link, type) => {
 				"product": {
 					"productImage":{
 						"mimetype": "image/jpeg",
-						"jpegThumbnail": fs.readFileSync(`./media/Rafizqi.jpg`)
+						"jpegThumbnail": fs.readFileSync(`./temp/image/zakinew.jpeg`)
 					},
 					"title": `${setting.fake}`,
 					"description": "",
@@ -389,8 +393,8 @@ _*Rafizqi-Self*_`)
 				})
 				
 				var num = mek.participant
-				gambar = fs.readFileSync('./src/help.jpg')
-				fakee = fs.readFileSync('./src/fake.jpg')
+				gambar = fs.readFileSync('./temp/image/zaki.jpg')
+				fakee = fs.readFileSync('./temp/image/zaki.jpg')
 			
 				isi = `*◪ SELF-BOT*
 				
@@ -489,7 +493,7 @@ _*Rafizqi-Self*_`)
 
 *❏ SELFBOT ❏*
 `
-zaki.sendMessage(from, gambar, image, { quoted: ftoko, caption: isi, thumbnail: fakee, contextInfo: {"forwardingScore": 999, "isForwarded": true}})
+zaki.sendMessage(from, gambar, image, { quoted: ftoko, caption: isi, thumbnail: zakinew, contextInfo: {"forwardingScore": 999, "isForwarded": true}})
 break
 default:
 
