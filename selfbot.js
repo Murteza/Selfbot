@@ -77,36 +77,27 @@ function kyun(seconds){
 const zakinew = fs.readFileSync('./temp/image/zakinew.jpeg')
 
 async function starts() {
-    const zaki = new WAConnection()
-    const banner = cfonts.render(('Ahmad Zaky|X|Santy_Gz|Selfbotzaki'), {
-        font: 'block',
-        color: 'candy',
-        align: 'center',
-        gradient: ["red","cyan"],
-        lineHeight: 1
-      });
-    zaki.logger.level = 'warn'
-    console.log(banner.string)
+
+	const zaki = new WAConnection()
+
+	zaki.logger.level = 'warn'
 	zaki.on('qr', () => {
-        console.log(color (`Scan Qr Code`, 'aqua'))
-    })
-    
-	fs.existsSync('./session.json') && zaki.loadAuthInfo('./session.json')
+		console.log(color('[','white'), color('!','red'), color(']','white'), color(' Scan the qr code above'))
+	})
+
+	fs.existsSync('./Nazwa.json') && zaki.loadAuthInfo('./Nazwa.json')
 	zaki.on('connecting', () => {
-		console.log(color ('⚠ Connecting...', 'red'))
+		start('2', 'Connecting...')
 	})
 	zaki.on('open', () => {
-		console.log(color ('Connected ♥️', 'green'))
+		success('2', '[BOT] BOT is now online!')
 	})
 	await zaki.connect({timeoutMs: 30*1000})
-    fs.writeFileSync('./session.json', JSON.stringify(zaki.base64EncodedAuthInfo(), null, '\t'))
-         
- zaki.on('CB:Blocklist', json => {
-	if (blocked.length > 2) return
-	for (let i of json[1].blocklist) {
-		blocked.push(i.replace('c.us', 's.whatsapp.net'))
-	}
-})
+        fs.writeFileSync('./Nazwa.json', JSON.stringify(zaki.base64EncodedAuthInfo(), null, '\t'))
+
+        console.log('=> Bot succsessfully loaded!')
+        lolcatjs.fromString('[DEV] Welcome back Owner! Hope you are doing well-')
+
 
 zaki.on('CB:action,,battery', json => {
 		global.batteryLevelStr = json[2][0][1].value
@@ -268,7 +259,7 @@ zaki.on('message-new', async(mek) => {
 			chats = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
 			const arg = chats.slice(command.length + 2, chats.length)
 		const botNumber = zaki.user.jid
-		const ownerNumber = ["6285841959635@s.whatsapp.net"] // ganti nomer lu yo
+		const ownerNumber = ["6283873394995@s.whatsapp.net"] // ganti nomer lu yo
 		const isGroup = from.endsWith('@g.us')
 		const sender = isGroup ? mek.participant : mek.key.remoteJid
 		const totalchat = await zaki.chats.all()
@@ -351,7 +342,7 @@ _*Rafizqi-Self*_`)
 					}
 	
 	if (!mek.key.fromMe && isGroup && banChat == false) {
-			if (budy.includes('@6285841959635')) {
+			if (budy.includes('@6283873394995')) {
 			cheat(`Mohon Maaf _@Rafizqi_ Sedang Offline!
 			
 *• Alasan:* ${alasanoff}
