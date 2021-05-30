@@ -229,7 +229,7 @@ zaki.on('CB:action,,battery', json => {
     }
 })
 
-dila.on('message-new', async(mek) => {
+zaki.on('message-new', async(mek) => {
 
 		try {
 
@@ -239,7 +239,7 @@ dila.on('message-new', async(mek) => {
 			global.prefix
 			global.blocked
 			global.batrei = global.batrei ? global.batrei : []
-			dila.on('CB:action,,battery', json => {
+			zaki.on('CB:action,,battery', json => {
 		    const batteryLevelStr = json[2][0][1].value
 		    const batterylevel = parseInt(batteryLevelStr)
 		    global.batrei.push(batterylevel)
