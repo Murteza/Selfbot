@@ -505,3 +505,4 @@ default:
 		console.log('%s', color(e, 'green'))
 	}
 })
+start()
