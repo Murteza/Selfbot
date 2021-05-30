@@ -492,3 +492,5 @@ _*Rafizqi-Self*_`)
 zaki.sendMessage(from, gambar, image, { quoted: ftoko, caption: isi, thumbnail: fakee, contextInfo: {"forwardingScore": 999, "isForwarded": true}})
 break
 }
+})
+start()
