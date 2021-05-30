@@ -38,7 +38,7 @@ const { recognize } = require('./lib/ocr');
 const { wait, simih, getBuffer, h2k, generateMessageID, getGroupAdmins, getRandom, banner, start, info, success } = require('./lib/functions');
 
 //************LOAD JSON*****************//
-const setiker = JSON.parse(fs.readFileSync('./src/stik.json'))
+const setiker = JSON.parse(fs.readFileSync('./src/stick.json'))
 const videonye = JSON.parse(fs.readFileSync('./src/video.json'))
 const audionye = JSON.parse(fs.readFileSync('./src/audio.json'))
 const imagenye = JSON.parse(fs.readFileSync('./src/image.json'))
