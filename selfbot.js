@@ -491,6 +491,17 @@ _*Rafizqi-Self*_`)
 `
 zaki.sendMessage(from, gambar, image, { quoted: ftoko, caption: isi, thumbnail: fakee, contextInfo: {"forwardingScore": 999, "isForwarded": true}})
 break
-}
+default:
+
+		zaki.on('CB:action,,battery', json => {
+
+		const batteryLevelStr = json[2][0][1].value
+		const batterylevel = parseInt(batteryLevelStr)
+		console.log('battrey ' + batterylevel)
+					})
+					console.log(color('Rafisqi', 'yellow'), color(sender.split('@')[0]))
+	}
+	} catch (e) {
+		console.log('%s', color(e, 'green'))
+	}
 })
-start()
