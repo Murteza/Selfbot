@@ -64,46 +64,24 @@ return (s < 10 ? '0' : '') + s;
 	var minutes = Math.floor(seconds % (60 * 60) / 60);
 	var seconds = Math.floor(seconds % 60);
 	return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
-let d = new Date
-		let locale = 'id'
-		let gmt = new Date(0).getTime() - new Date('1 Januari 2021').getTime()
-		let weton = ['Pahing', 'Pon','Wage','Kliwon','Legi'][Math.floor(((d * 1) + gmt) / 84600000) % 5]
-		let week = d.toLocaleDateString(locale, { weekday: 'long' })
-		let calender = d.toLocaleDateString(locale, {
-		day: 'numeric',
-		month: 'long',
-		year: 'numeric'
-			})
-			let v = new Date
-			let localle = 'id'
-			const harinya = d.toLocaleDateString(locale, { weekday: 'long' })
-				
-			var ramadhan = Math.floor(penghitungRmd - moment().format('DD:HH:mm')) 
-			let hri = new Date
-			let localev = 'id'
-			var hari= hri.toLocaleDateString(localev, { weekday: 'long' })
-}
-             const client = new WAConnection()
-
-client.logger.level = 'warn'
-console.log(banner.string)
+	
+const client = new WAConnection()
 client.on('qr', qr => {
-qrcode.generate(qr, { small: true })
-console.log(color('[','white'), color('!','green'), color(']','white'), color('Scan qr nya !'))
+
+   qrcode.generate(qr, { small: true })
+
+   console.log(`[ ${time} ] QR code is ready`)
 })
 
-	client.on('credentials-updated', () => {
-	fs.writeFileSync('./session.json', JSON.stringify(client.base64EncodedAuthInfo(), null, '\t'))
-	info('2', 'Loading')
-	})
-	fs.existsSync('./session.json') && client.loadAuthInfo('./session.json')
-	client.on('connecting', () => {
-	start('2', 'Loading...')
-	})
-	client.on('open', () => {
-	success('2', 'Sukses Masuk ')
-	})
-	client.connect({timeoutMs: 30*1000})
+client.on('credentials-updated', () => {
+   const authInfo = client.base64EncodedAuthInfo()
+   console.log(`credentials updated!`)
+   fs.writeFileSync('./session.json', JSON.stringify(authInfo, null, '\t'))
+})
+
+fs.existsSync('./session.json') && client.loadAuthInfo('./session.json')
+
+client.connect();
 
 client.on('CB:Blocklist', json => {
 	if (blocked.length > 2) return
