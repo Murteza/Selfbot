@@ -80,8 +80,8 @@ async function starts() {
     const zaki = new WAConnection()
     zaki.logger.level = 'warn'
 
+zaki.logger.level = 'warn'
 console.log(banner.string)
-
 zaki.on('qr', qr => {
 qrcode.generate(qr, { small: true })
 console.log(color('[','white'), color('!','green'), color(']','white'), color('Scan qr nya !'))
