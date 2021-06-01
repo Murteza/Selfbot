@@ -77,26 +77,29 @@ function kyun(seconds){
 const zakinew = fs.readFileSync('./temp/image/zakinew.jpeg')
 
 async function starts() {
-
-	const zaki = new WAConnection()
-
-	zaki.logger.level = 'warn'
-	zaki.on('qr', () => {
-		console.log(color('[','white'), color('!','red'), color(']','white'), color(' Scan the qr code above'))
+    const HLX = new WAConnection()
+    const banner = cfonts.render(('Ahmad Zaky|X|Santy_Gz|SelfbotHLX'), {
+        font: 'block',
+        color: 'candy',
+        align: 'center',
+        gradient: ["red","cyan"],
+        lineHeight: 1
+      });
+    HLX.logger.level = 'warn'
+    console.log(banner.string)
+	HLX.on('qr', () => {
+        console.log(color (`Scan Qr Code`, 'aqua'))
+    })
+    
+	fs.existsSync('./session.json') && HLX.loadAuthInfo('./session.json')
+	HLX.on('connecting', () => {
+		console.log(color ('⚠ Connecting...', 'red'))
 	})
-
-	fs.existsSync('./Nazwa.json') && zaki.loadAuthInfo('./Nazwa.json')
-	zaki.on('connecting', () => {
-		start('2', 'Connecting...')
+	HLX.on('open', () => {
+		console.log(color ('Connected ♥️', 'green'))
 	})
-	zaki.on('open', () => {
-		success('2', '[BOT] BOT is now online!')
-	})
-	await zaki.connect({timeoutMs: 30*1000})
-        fs.writeFileSync('./Nazwa.json', JSON.stringify(zaki.base64EncodedAuthInfo(), null, '\t'))
-
-        console.log('=> Bot succsessfully loaded!')
-        lolcatjs.fromString('[DEV] Welcome back Owner! Hope you are doing well-')
+	await HLX.connect({timeoutMs: 30*1000})
+    fs.writeFileSync('./session.json', JSON.stringify(HLX.base64EncodedAuthInfo(), null, '\t'))
 
 
 zaki.on('CB:action,,battery', json => {
