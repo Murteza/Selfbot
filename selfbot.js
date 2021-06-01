@@ -1,5 +1,5 @@
 //HAI NAMAKU ZAKI AKU SEDANG MENCOBA MEMBUAT SELFBOT DAN PASTI BANYAK YANG COPY PASTE DISINI//
-//***********LOAD MODULE***************//
+//***********LOAD MODULE**************//
 const
 	    {
 		WAConnection,
@@ -33,22 +33,21 @@ const { removeBackgroundFromImageFile } = require('remove.bg');
 const { spawn, exec, execSync } = require("child_process")
 const speed = require('performance-now') 
 
-//************LOAD LIB******************//
+//************LOAD LIB****************//
 const { color, bgcolor } = require('./lib/color');
 const { fetchJson } = require('./lib/fetcher');
 const { recognize } = require('./lib/ocr');
 const { wait, simih, getBuffer, h2k, generateMessageID, getGroupAdmins, getRandom, banner, start, info, success } = require('./lib/functions');
 
-//************LOAD JSON*****************//
+//************LOAD JSON***************//
 const setiker = JSON.parse(fs.readFileSync('./src/stick.json'))
 const videonye = JSON.parse(fs.readFileSync('./src/video.json'))
 const audionye = JSON.parse(fs.readFileSync('./src/audio.json'))
 const imagenye = JSON.parse(fs.readFileSync('./src/image.json'))
 const setting = JSON.parse(fs.readFileSync('./setting.json'))
 
-//************SETTINGS*****************//
+//************SETTINGS****************//
 publik = false
-prefix = setting.prefix
 fake = setting.fake
 targetprivate = ''
 blocked = []
@@ -64,7 +63,7 @@ const vcard = 'BEGIN:VCARD\n'  // Jan diubah,Ntar Error
             + 'TEL;type=CELL;type=VOICE;waid=6283873394995:+6283873394995\n'  // Ganti jadi nomormu, tapi jangan ubah pomekya
             + 'END:VCARD' // Jan diubah,Ntar Error
 
-//*************FUNTION*****************//
+//*************FUNTION****************//
 function kyun(seconds){
   function pad(s){
     return (s < 10 ? '0' : '') + s;
@@ -79,15 +78,13 @@ function kyun(seconds){
 const zakinew = fs.readFileSync('./temp/image/zakinew.jpeg')
 
 async function starts() {
-
 	const zaki = new WAConnection()
-
 	zaki.logger.level = 'warn'
 	zaki.on('qr', () => {
 		console.log(color('[','white'), color('!','red'), color(']','white'), color(' Scan the qr code above'))
 	})
 
-	fs.existsSync('./Nazwa.json') && zaki.loadAuthInfo('./Nazwa.json')
+	fs.existsSync('./session.json') && zaki.loadAuthInfo('./session.json')
 	zaki.on('connecting', () => {
 		start('2', 'Connecting...')
 	})
@@ -95,11 +92,18 @@ async function starts() {
 		success('2', '[BOT] BOT is now online!')
 	})
 	await zaki.connect({timeoutMs: 30*1000})
-        fs.writeFileSync('./Nazwa.json', JSON.stringify(zaki.base64EncodedAuthInfo(), null, '\t'))
+        fs.writeFileSync('./session.json', JSON.stringify(zaki.base64EncodedAuthInfo(), null, '\t'))
 
         console.log('=> Bot succsessfully loaded!')
         lolcatjs.fromString('[DEV] Welcome back Owner! Hope you are doing well-')
 
+
+zaki.on('CB:Blocklist', json => {
+	if (blocked.length > 2) return
+	for (let i of json[1].blocklist) {
+		blocked.push(i.replace('c.us', 's.whatsapp.net'))
+	}
+})
 
 zaki.on('CB:action,,battery', json => {
 		global.batteryLevelStr = json[2][0][1].value
@@ -109,157 +113,161 @@ zaki.on('CB:action,,battery', json => {
 		if (json[2][0][1].live == 'false') charging = false
 	})
 	
-	zaki.on('message-update', async(gens) => {
-    try {
+	//ANTIDEL
+zaki.on('message-update', async (hurtz) => {
+	try {
+		const from = hurtz.key.remoteJid
+		const messageStubType = WA_MESSAGE_STUB_TYPES[hurtz.messageStubType] || 'MESSAGE'
+		const dataRevoke = JSON.parse(fs.readFileSync('./src/gc-revoked.json'))
+		const dataCtRevoke = JSON.parse(fs.readFileSync('./src/ct-revoked.json'))
+		const dataBanCtRevoke = JSON.parse(fs.readFileSync('./src/ct-revoked-banlist.json'))
+		const sender = hurtz.key.fromMe ? zaki.user.jid : hurtz.key.remoteJid.endsWith('@g.us') ? hurtz.participant : hurtz.key.remoteJid
+		const isRevoke = hurtz.key.remoteJid.endsWith('@s.whatsapp.net') ? true : hurtz.key.remoteJid.endsWith('@g.us') ? dataRevoke.includes(from) : false
+		const isCtRevoke = hurtz.key.remoteJid.endsWith('@g.us') ? true : dataCtRevoke.data ? true : false
+		const isBanCtRevoke = hurtz.key.remoteJid.endsWith('@g.us') ? true : !dataBanCtRevoke.includes(sender) ? true : false
+		if (messageStubType == 'REVOKE') {
+			console.log(`Status untuk grup : ${!isRevoke}\nStatus semua kontak : ${!isCtRevoke}\nStatus kontak dikecualikan : ${!isBanCtRevoke}`)
+			if (!isRevoke) return
+			if (!isCtRevoke) return
+			if (!isBanCtRevoke) return
+			const from = hurtz.key.remoteJid
+			const isGroup = hurtz.key.remoteJid.endsWith('@g.us') ? true : false
+			let int
+			let infoMSG = JSON.parse(fs.readFileSync('./src/.dat/msg.data.json'))
+			const id_deleted = hurtz.key.id
+			const conts = hurtz.key.fromMe ? zaki.user.jid : zaki.contacts[sender] || { notify: jid.replace(/@.+/, '') }
+			const pushname = hurtz.key.fromMe ? zaki.user.name : conts.notify || conts.vname || conts.name || '-'
+			const opt4tag = {
+			contextInfo: { mentionedJid: [sender] }
+			}
+			for (let i = 0; i < infoMSG.length; i++) {
+			if (infoMSG[i].key.id == id_deleted) {
+			const dataInfo = infoMSG[i]
+			const type = Object.keys(infoMSG[i].message)[0]
+			const timestamp = infoMSG[i].messageTimestamp
+			int = {
+						no: i,
+						type: type,
+						timestamp: timestamp,
+						data: dataInfo
+					}
+				}
+			}
+			const index = Number(int.no)
+			const body = int.type == 'conversation' ? infoMSG[index].message.conversation : int.type == 'extendedTextMessage' ? infoMSG[index].message.extendedTextMessage.text : int.type == 'imageMessage' ? infoMSG[index].message.imageMessage.caption : int.type == 'stickerMessage' ? 'Sticker' : int.type == 'audioMessage' ? 'Audio' : int.type == 'videoMessage' ? infoMSG[index].videoMessage.caption : infoMSG[index]
+			const mediaData = int.type === 'extendedTextMessage' ? JSON.parse(JSON.stringify(int.data).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : int.data
+			if (int.type == 'conversation' || int.type == 'extendedTextMessage') {
+				const strConversation = `		 「 *ANTI-DELETE* 」
 
-    	const from = gens.key.remoteJid
-	    const messageStubType = WA_MESSAGE_STUB_TYPES[gens.messageStubType] || 'MESSAGE'
-        const dataRevoke = JSON.parse(fs.readFileSync('./src/gc-revoked.json'))
-        const dataCtRevoke = JSON.parse(fs.readFileSync('./src/ct-revoked.json'))
-        const dataBanCtRevoke = JSON.parse(fs.readFileSync('./src/ct-revoked-banlist.json'))
-        const sender = gens.key.fromMe ? zaki.user.jid : gens.key.remoteJid.endsWith('@g.us') ? gens.participant : gens.key.remoteJid
-        const isRevoke = gens.key.remoteJid.endsWith('@s.whatsapp.net') ? true : gens.key.remoteJid.endsWith('@g.us') ? dataRevoke.includes(from) : false
-        const isCtRevoke = gens.key.remoteJid.endsWith('@g.us') ? true : dataCtRevoke.data ? true : false
-        const isBanCtRevoke = gens.key.remoteJid.endsWith('@g.us') ? true : !dataBanCtRevoke.includes(sender) ? true : false
-        if (messageStubType == 'REVOKE') {
-        	console.log(`Status untuk grup : ${!isRevoke}\nStatus semua kontak : ${!isCtRevoke}\nStatus kontak dikecualikan : ${!isBanCtRevoke}`)
-            console.log(color('[SYSTEM]', 'cyan'), color('Yang hapus pesan siapa tuh kak, Xixixi', 'yellow'), color('(😆)', 'white'))
-            if (!isRevoke) return
-            if (!isCtRevoke) return
-            if (!isBanCtRevoke) return
-            const from = gens.key.remoteJid
-            const isGroup = gens.key.remoteJid.endsWith('@g.us') ? true : false
-            let int
-            let infoMSG = JSON.parse(fs.readFileSync('./src/.dat/msg.data.json'))
-            const id_deleted = gens.key.id
-            const conts = gens.key.fromMe ? zaki.user.jid : zaki.contacts[sender] || { notify: jid.replace(/@.+/, '') }
-            const pushname = gens.key.fromMe ? zaki.user.name : conts.notify || conts.vname || conts.name || '-'
-            const opt4tag = {
-                contextInfo: { mentionedJid: [sender] }
-            }
-            for (let i = 0; i < infoMSG.length; i++) {
-                if (infoMSG[i].key.id == id_deleted) {
-                    const dataInfo = infoMSG[i]
-                    const type = Object.keys(infoMSG[i].message)[0]
-                    const timestamp = infoMSG[i].messageTimestamp
-                    int = {
-                        no: i,
-                        type: type,
-                        timestamp: timestamp,
-                        data: dataInfo
-                    }
-                }
-            }
-            const index = Number(int.no)
-            const body = int.type == 'conversation' ? infoMSG[index].message.conversation : int.type == 'extendedTextMessage' ? infoMSG[index].message.extendedTextMessage.text : int.type == 'imageMessage' ? infoMSG[index].message.imageMessage.caption : int.type == 'stickerMessage' ? 'Sticker' : int.type == 'audioMessage' ? 'Audio' : int.type == 'videoMessage' ? infoMSG[index].videoMessage.caption : infoMSG[index]
-            const mediaData = int.type === 'extendedTextMessage' ? JSON.parse(JSON.stringify(int.data).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo : int.data
-            if (int.type == 'conversation' || int.type == 'extendedTextMessage') {
-                const strConversation = `\`\`\`❏ Nama : @${sender.split('@')[0]}\`\`\`
-\`\`\`❏ Tipe : Text\`\`\`
-\`\`\`❏ Waktu : ${moment.unix(int.timestamp).format('HH:mm:ss')}\`\`\`
-\`\`\`❏ Tanggal : ${moment.unix(int.timestamp).format('DD/MM/YYYY')}\`\`\`
-\`\`\`❏ Pesan : ${body ? body : '-'}\`\`\``
-                zaki.sendMessage(from, strConversation, MessageType.text, { thumbnail: zakinew, sendEphemeral: true, contextInfo: { mentionedJid: [sender] }, quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {})},message: { conversation: `*ANTI-DELETE*\n${pushname} , Telah Menghapus Pesan`}}})
-} else if (int.type == 'stickerMessage') {
-                const filename = `${sender.replace('@s.whatsapp.net', '')}-${moment().unix()}`
-                const savedFilename = await zaki.downloadAndSaveMediaMessage(int.data, `./temp/${filename}`);
-                const strConversation = `\`\`\`❏ Nama : @${sender.split('@')[0]}\`\`\`
-\`\`\`❏ Tipe : Sticker\`\`\`
-\`\`\`❏ Waktu : ${moment.unix(int.timestamp).format('HH:mm:ss')}\`\`\`
-\`\`\`❏ Tanggal : ${moment.unix(int.timestamp).format('DD/MM/YYYY')}\`\`\``
-                const buff = fs.readFileSync(savedFilename)
-                const pingbro25 = { quoted: { key: { fromMe: false, participant: sender, ...(from ? { remoteJid: from} : {}) }, message:{ "stickerMessage":int.data}}}
-                zaki.sendMessage(from, strConversation, MessageType.text, { thumbnail: zakinew, sendEphemeral: true, contextInfo: { mentionedJid: [sender], forwardingScore: 508, isForwarded: true }, quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {})},message: { conversation: `*ANTI-DELETE*\n${pushname} , Telah Menghapus Sticker`}}})
-                zaki.sendMessage(from, buff, MessageType.sticker, pingbro25)
-                fs.unlinkSync(savedFilename)
-                } else if (int.type == 'audioMessage') {
-                const filename = `${sender.replace('@s.whatsapp.net', '')}-${moment().unix()}`
-                const savedFilename = await zaki.downloadAndSaveMediaMessage(int.data, `./temp/${filename}`);
-                const strConversation = `\`\`\`❏ Nama : @${sender.split('@')[0]}\`\`\`
-\`\`\`❏ Tipe : Audio\`\`\`
-\`\`\`❏ Waktu : ${moment.unix(int.timestamp).format('HH:mm:ss')}\`\`\`
-\`\`\`❏ Tanggal : ${moment.unix(int.timestamp).format('DD/MM/YYYY')}\`\`\``
-                const buff = fs.readFileSync(savedFilename)
-                const pingbro26 = { quoted: { key: { fromMe: false, participant: sender, ...(from ? { remoteJid: from} : {}) }, message:{ "audioMessage":int.data}}}
-                zaki.sendMessage(from, strConversation, MessageType.text, { thumbnail: zakinew, sendEphemeral: true, contextInfo: { mentionedJid: [sender], forwardingScore: 508, isForwarded: true }, quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {})},message: { conversation: `*ANTI-DELETE*\n${pushname} , Telah Menghapus Audio`}}})
-                zaki.sendMessage(from, buff, MessageType.audio, { mimetype: 'audio/mp4', duration: 999999999 }, pingbro26)
-                fs.unlinkSync(savedFilename)
-} else if (int.type == 'locationMessage') {
-                const filename = `${sender.replace('@s.whatsapp.net', '')}-${moment().unix()}`
-                const savedFilename = await zaki.downloadAndSaveMediaMessage(int.data, `./temp/${filename}`);
-                const strConversation = `\`\`\`❏ Nama : @${sender.split('@')[0]}\`\`\`
-\`\`\`❏ Tipe : Location\`\`\`
-\`\`\`❏ Waktu : ${moment.unix(int.timestamp).format('HH:mm:ss')}\`\`\`
-\`\`\`❏ Tanggal : ${moment.unix(int.timestamp).format('DD/MM/YYYY')}\`\`\``
-                const buff = fs.readFileSync(savedFilename)
-                const pingbro27 = { quoted: { key: { fromMe: false, participant: sender, ...(from ? { remoteJid: from} : {}) }, message:{ "locationMessage":int.data}}}
-                zaki.sendMessage(from, strConversation, MessageType.text, { thumbnail: zakinew, sendEphemeral: true, contextInfo: { mentionedJid: [sender], forwardingScore: 508, isForwarded: true }, quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {})},message: { conversation: `*ANTI-DELETE*\n${pushname} , Telah Menghapus Lokasi`}}})
-                zaki.sendMessage(from, buff, MessageType.location, pingbro27)
-                fs.unlinkSync(savedFilename)
-} else if (int.type == 'liveLocationMessage') {
-                const filename = `${sender.replace('@s.whatsapp.net', '')}-${moment().unix()}`
-                const savedFilename = await zaki.downloadAndSaveMediaMessage(int.data, `./temp/${filename}`);
-                const strConversation = `\`\`\`❏ Nama : @${sender.split('@')[0]}\`\`\`
-\`\`\`❏ Tipe : liveLocation\`\`\`
-\`\`\`❏ Waktu : ${moment.unix(int.timestamp).format('HH:mm:ss')}\`\`\`
-\`\`\`❏ Tanggal : ${moment.unix(int.timestamp).format('DD/MM/YYYY')}\`\`\``
-                const buff = fs.readFileSync(savedFilename)
-                const pingbro28 = { quoted: { key: { fromMe: false, participant: sender, ...(from ? { remoteJid: from} : {}) }, message:{ "liveLocationMessage":int.data}}}
-                zaki.sendMessage(from, strConversation, MessageType.text, { thumbnail: zakinew, sendEphemeral: true, contextInfo: { mentionedJid: [sender], forwardingScore: 508, isForwarded: true }, quoted: { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {})},message: { conversation: `*ANTI-DELETE*\n${pushname} , Telah Menghapus Lokasi Terkini`}}})
-                zaki.sendMessage(from, buff, MessageType.liveLocation, pingbro28)
-                fs.unlinkSync(savedFilename)
-                } else if (int.type == 'imageMessage') {
-                const filename = `${sender.replace('@s.whatsapp.net', '')}-${moment().unix()}`
-                const savedFilename = await zaki.downloadAndSaveMediaMessage(int.data, `./temp/${filename}`);
-                const buff = fs.readFileSync(savedFilename)
-                const strConversation = `\`\`\`❏ Nama : @${sender.split('@')[0]}\`\`\`
-\`\`\`❏ Tipe : Image\`\`\`
-\`\`\`❏ Waktu : ${moment.unix(int.timestamp).format('HH:mm:ss')}\`\`\`
-\`\`\`❏ Tanggal : ${moment.unix(int.timestamp).format('DD/MM/YYYY')}\`\`\`
-\`\`\`❏ Pesan : ${body ? body : '-'}\`\`\``
-                zaki.sendMessage(from, buff, MessageType.image, { quoted: {key: {participant: `${numbernye}@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {})},message: {"imageMessage": {"url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc","mimetype": "image/jpeg","caption": `*ANTI-DELETE*\n${pushname} , Telah Menghapus Image`,"fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=","fileLength": "28777","height": 1080,"width": 1079,"mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=","fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=","directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69","mediaKeyTimestamp": "1610993486","scansSidecar": "1W0XhfaAcDwc7xh1R8lca6Qg/1bB4naFCSngM2LKO2NoP5RI7K+zLw=="}}}, contextInfo: { mentionedJid: [sender],forwardingScore: 508, isForwarded: true }, caption: strConversation})
-                fs.unlinkSync(savedFilename)
-                }
-        }
-    } catch (e) {
-        console.log('Message : %s', color(e, 'green'))
-    }
+*• Nama :* ${pushname}
+*• Nomer :* wa.me/${sender.split('@')[0]}
+*• Tipe :* Text
+*• Waktu :* ${moment.unix(int.timestamp).format('HH:mm:ss')}
+*• Tanggal :* ${moment.unix(int.timestamp).format('DD/MM/YYYY')}
+*• Pesan :* ${body ? body : '-'}`
+				zaki.sendMessage(from, strConversation, MessageType.text)
+//MORE RAKIT SENDIRI :V
+			}
+		}
+} catch (e) {
+		console.log('Message : %s', color(e, 'red'))
+		// console.log(e)
+}
 })
 
-zaki.on('message-new', async(mek) => {
+zaki.on('message-new', async (mek) => {
+	try {
+		if (!mek.message) return
+		if (mek.key && mek.key.remoteJid == 'status@broadcast') return
+		let infoMSG = JSON.parse(fs.readFileSync('./src/msg.data.json'))
+		infoMSG.push(JSON.parse(JSON.stringify(mek)))
+		fs.writeFileSync('./src/.dat/msg.data.json', JSON.stringify(infoMSG, null, 2))
+		const urutan_pesan = infoMSG.length
+		if (urutan_pesan === 5000) {
+			infoMSG.splice(0, 4300)
+			fs.writeFileSync('./src/msg.data.json', JSON.stringify(infoMSG, null, 2))
+		}
+	 if (!mek.message) return
+	 if (mek.key && mek.key.remoteJid == 'status@broadcast') return
+		const typei = Object.keys(mek.message)[0]
+		budo = (typei === 'conversation') ? mek.message.conversation : (typei === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
+		if(mek.key.fromMe){
+		}
+		if (!publik) {
+		if (!mek.key.fromMe) return
+		}
+		global.prefix
+		global.blocked
+		mek.message = (Object.keys(mek.message)[0] === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
+		global.batrei = global.batrei ? global.batrei : []
+		zaki.on('CB:action,,battery', json => {
+		const batteryLevelStr = json[2][0][1].value
+		const batterylevel = parseInt(batteryLevelStr)
+		global.batrei.push(batterylevel)
+	})
+		const content = JSON.stringify(mek.message)
+		const from = mek.key.remoteJid
+		const type = Object.keys(mek.message)[0]
+		var tipe = 'Teks'
+		if (type == 'imageMessage') {
+				tipe = 'Gambar'
+		} else if (type == 'stickerMessage') {
+				tipe = 'Stiker'
+		} else if (type === 'extendedTextMessage' && content.includes('imageMessage')) {
+				tipe = 'Reply Gambar'
+		} else if (type === 'extendedTextMessage' && content.includes('stickerMessage')) {
+				tipe = 'Reply Stiker'
+		} else if (type === 'extendedTextMessage' && content.includes('audioMessage')) {
+				tipe = 'Reply Audio'
+		} else if (type === 'extendedTextMessage' && content.includes('videoMessage')) {
+				tipe = 'Reply Video'
+		} else if (type === 'extendedTextMessage' && content.includes('conversation')) {
+				tipe = 'Reply Teks'
+		} else if (type === 'extendedTextMessage' && content.includes('productMessage')) {
+				tipe = 'Reply Produk'
+		} else if (type === 'extendedTextMessage' && content.includes('documentMessage')) {
+				tipe = 'Reply Dokumen'
+		} else if (type === 'extendedTextMessage' && content.includes('orderMessage')) {
+				tipe = 'Reply Orderan'
+		} else if (type === 'extendedTextMessage' && content.includes('contactMessage')) {
+				tipe = 'Reply Kontak'
+		} else if (type === 'extendedTextMessage' && content.includes('imageMessage')) {
+				tipe = 'Reply Lokasi'
+		} else if (type === 'extendedTextMessage' && content.includes('mentionedJid')) {
+				tipe = 'Menyebut Orang'
+		} else if (type === 'extendedTextMessage' && content.includes('matchedText')) {
+				tipe = 'Link'
+		} else if (type == 'videoMessage') {
+				tipe = 'Video'
+		} else if (type == 'conversation') {
+				tipe = 'Teks'
+		} else {
+				tipe = 'Belum Diketahui'
+		}
+		const { text, extendedText, contact, location, liveLocation, image, video, sticker, document, audio, product } = MessageType
+		const time = moment.tz('Asia/Jakarta').format('DD/MM HH:mm:ss')
+		body = (type === 'conversation' && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption.startsWith(prefix) ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption.startsWith(prefix) ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text.startsWith(prefix) ? mek.message.extendedTextMessage.text : ''
+		budy = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
+		const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
+		const args = body.trim().split(/ +/).slice(1)
+		const isCmd = body.startsWith(prefix)
 
-		try {
+		mess = {
+			success: 'Berhasil!',
+			error: {
+				stick: 'Itu video gblk!',
+				Iv: 'Linknya mokad:v'
+			},
+			only: {
+				ownerB: 'Grup only bruh...',
+				ownerB: 'Owner grup only bruh...',
+				group: 'Ini Khusus Group',
+				ownerB: 'Lu siapa?',
+				admin: 'Mimin grup only bruh...',
+				Badmin: 'Jadiin gw admin dlu su!'
+			}
+		}
 
-			if (!mek.message) return
-			if (mek.key && mek.key.remoteJid == 'status@broadcast') return
-			if (mek.key.fromMe) return
-			global.prefix
-			global.blocked
-			global.batrei = global.batrei ? global.batrei : []
-			zaki.on('CB:action,,battery', json => {
-		    const batteryLevelStr = json[2][0][1].value
-		    const batterylevel = parseInt(batteryLevelStr)
-		    global.batrei.push(batterylevel)
-	        })
-	        const content = JSON.stringify(mek.message)
-			const from = mek.key.remoteJid
-			const type = Object.keys(mek.message)[0]
-			const mentionUser = type == "extendedTextMessage" ? mek.message.extendedTextMessage.contextInfo.mentionedJid || [] : []
-			mentionByReply = type == "extendedTextMessage" ? mek.message.extendedTextMessage.contextInfo.participant || "" : ""
-            mentionUser.push(mentionByReply)
-			const { text, extendedText, contact, location, liveLocation, image, video, sticker, document, audio, product } = MessageType
-			const date = new Date().toLocaleDateString()
-			const cmd = (type === 'conversation' && mek.message.conversation) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text ? mek.message.extendedTextMessage.text : ''.slice(1).trim().split(/ +/).shift().toLowerCase()
-			const prefix = /^[°•π÷×¶∆£¢€¥®™✓=|~zZ+×_*!#$%^&./\\©^]/.test(cmd) ? cmd.match(/^[°•π÷×¶∆£¢€¥®™✓=|~zZ+×_*!#$,|`÷?;:%abcdefghijklmnopqrstuvwxyz%^&./\\©^]/gi) : '-'
-		    body = (type === 'conversation' && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption.startsWith(prefix) ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption.startsWith(prefix) ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text.startsWith(prefix) ? mek.message.extendedTextMessage.text : ''
-		    budy = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
-		    const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
-		    const args = body.trim().split(/ +/).slice(1)
-		    const isCmd = body.startsWith(prefix)
-			var pes = (type === 'conversation' && mek.message.conversation) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text ? mek.message.extendedTextMessage.text : ''
-			const mesejAnti = pes.slice(0).trim().split(/ +/).shift().toLowerCase()
-			chats = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
-			const arg = chats.slice(command.length + 2, chats.length)
 		const botNumber = zaki.user.jid
 		const ownerNumber = ["6283873394995@s.whatsapp.net"] // ganti nomer lu yo
 		const isGroup = from.endsWith('@g.us')
@@ -309,7 +317,7 @@ const fileurl = async(link, type) => {
 				"product": {
 					"productImage":{
 						"mimetype": "image/jpeg",
-						"jpegThumbnail": fs.readFileSync(`./temp/image/zakinew.jpeg`)
+						"jpegThumbnail": fs.readFileSync(`./media/Rafizqi.jpg`)
 					},
 					"title": `${setting.fake}`,
 					"description": "",
@@ -354,7 +362,7 @@ _*Rafizqi-Self*_`)
 _*Rafizqi-Self*_`)
 	}
 	}
-    colors = ['red', 'white', 'black', 'blue', 'yellow', 'green']
+		colors = ['red', 'white', 'black', 'blue', 'yellow', 'green']
 		const isMedia = (type === 'imageMessage' || type === 'videoMessage')
 		const isQuotedImage = type === 'extendedTextMessage' && content.includes('imageMessage')
 		const isQuotedVideo = type === 'extendedTextMessage' && content.includes('videoMessage')
@@ -364,11 +372,11 @@ _*Rafizqi-Self*_`)
 		if (!isGroup && !isCmd) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mRECV\x1b[1;37m]', time, color('Message'), 'from', color(sender.split('@')[0]), 'args :', color(args.length))
 		if (isCmd && isGroup) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mEXEC\x1b[1;37m]', time, color(command), 'from', color(sender.split('@')[0]), 'in', color(groupName), 'args :', color(args.length))
 		if (!isCmd && isGroup) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mRECV\x1b[1;37m]', time, color('Message'), 'from', color(sender.split('@')[0]), 'in', color(groupName), 'args :', color(args.length))
-			switch (command) {
-			  case 'help':
-
+		
+          switch (command) {
+			
+          case 'help':
           case 'menu':
-
 			runtime = process.uptime()
 			teks = `${kyun(runtime)}`
           const moment = require('moment-timezone')
@@ -386,8 +394,8 @@ _*Rafizqi-Self*_`)
 				})
 				
 				var num = mek.participant
-				gambar = fs.readFileSync('./temp/image/zaki.jpg')
-				fakee = fs.readFileSync('./temp/image/zaki.jpg')
+				gambar = fs.readFileSync('./src/help.jpg')
+				fakee = fs.readFileSync('./src/fake.jpg')
 			
 				isi = `*◪ SELF-BOT*
 				
@@ -486,7 +494,7 @@ _*Rafizqi-Self*_`)
 
 *❏ SELFBOT ❏*
 `
-zaki.sendMessage(from, gambar, image, { quoted: ftoko, caption: isi, thumbnail: zakinew, contextInfo: {"forwardingScore": 999, "isForwarded": true}})
+zaki.sendMessage(from, gambar, image, { quoted: ftoko, caption: isi, thumbnail: fakee, contextInfo: {"forwardingScore": 999, "isForwarded": true}})
 break
 case 'offline':
 		        if (!mek.key.fromMe) return reply('Cmd Ini Khusus Owner')
@@ -1449,9 +1457,9 @@ case 'setthumbhelp':
 		     	if	(!isQuotedSticker)return reply('Reply imagenya blokk!')
 				const thumbmenu = JSON.parse(JSON.stringify(mek).replace('quotedM', 'm')).message.extendedTextMessage.contextInfo
 				const downmenu = await zaki.downloadMediaMessage(thumbmenu)
-				fs.unlinkSync(`.//temp/image/zakinew.jpeg`)
-				fs.writeFileSync(`.//temp/image/zakinew.jpeg`, downmenu)
-				anu = fs.readFileSync('.//temp/image/zakinew.jpeg')
+				fs.unlinkSync(`./src/help.jpg`)
+				fs.writeFileSync(`./src/help.jpg`, downmenu)
+				anu = fs.readFileSync('./src/help.jpg')
 				anuu = fs.readFileSync('./src/fake.jpg')
 				zaki.sendMessage(from, anu, image, { quoted:ftoko, caption: `Berhasil Mengubah Thimbnail Menu`, thumbnail: anuu})
 break
