@@ -10,12 +10,12 @@ console.log('------------------------------------------------')
 let { spawn } = require('child_process')
 let path = require('path')
 const CFonts  = require('cfonts')
-CFonts.say('HLX-BOT', {
+CFonts.say('SelfBot-HLX', {
   font: 'chrome',
   align: 'center',
   gradient: ['red', 'magenta']
 })
-CFonts.say('\'HLX-BOT\' By @Ahmadzakix', {
+CFonts.say('\'HLX-BOT\' By @Ahmadzakix and @Santay-gz', {
   font: 'console',
   align: 'center',
   gradient: ['red', 'magenta']
