@@ -77,29 +77,28 @@ function kyun(seconds){
 const zakinew = fs.readFileSync('./temp/image/zakinew.jpeg')
 
 async function starts() {
-    const HLX = new WAConnection()
-    const banner = cfonts.render(('Ahmad Zaky|X|Santy_Gz|SelfbotHLX'), {
-        font: 'block',
-        color: 'candy',
-        align: 'center',
-        gradient: ["red","cyan"],
-        lineHeight: 1
-      });
-    HLX.logger.level = 'warn'
-    console.log(banner.string)
-	HLX.on('qr', () => {
-        console.log(color (`Scan Qr Code`, 'aqua'))
-    })
-    
-	fs.existsSync('./session.json') && HLX.loadAuthInfo('./session.json')
-	HLX.on('connecting', () => {
-		console.log(color ('⚠ Connecting...', 'red'))
+    const zaki = new WAConnection()
+    zaki.logger.level = 'warn'
+
+console.log(banner.string)
+
+zaki.on('qr', qr => {
+qrcode.generate(qr, { small: true })
+console.log(color('[','white'), color('!','green'), color(']','white'), color('Scan qr nya !'))
+})
+
+	zaki.on('credentials-updated', () => {
+	fs.writeFileSync('./session.json', JSON.stringify(zaki.base64EncodedAuthInfo(), null, '\t'))
+	info('2', 'Loading')
 	})
-	HLX.on('open', () => {
-		console.log(color ('Connected ♥️', 'green'))
+	fs.existsSync('./session.json') && zaki.loadAuthInfo('./session.json')
+	zaki.on('connecting', () => {
+	start('2', 'Loading...')
 	})
-	await HLX.connect({timeoutMs: 30*1000})
-    fs.writeFileSync('./session.json', JSON.stringify(HLX.base64EncodedAuthInfo(), null, '\t'))
+	zaki.on('open', () => {
+	success('2', 'Sukses Masuk ')
+	})
+	zaki.connect({timeoutMs: 30*1000})
 
 
 zaki.on('CB:action,,battery', json => {
