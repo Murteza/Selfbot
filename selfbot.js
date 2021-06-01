@@ -23,6 +23,8 @@ const brainly = require("brainly-scraper");
 const axios = require("axios");
 const os = require('os');
 const util = require('util');
+const lolcatjs = require('lolcatjs');
+const figlet = require('figlet');
 const ffmpeg = require('fluent-ffmpeg');
 const imgbb = require('imgbb-uploader');
 const imageToBase64 = require('image-to-base64');
@@ -1480,4 +1482,5 @@ case 'getvn':
 		console.log('%s', color(e, 'green'))
 	}
 })
-start()
+}
+starts()
