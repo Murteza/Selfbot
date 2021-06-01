@@ -1,5 +1,5 @@
 {
-  "name": "selfbothlx-main",
+  "name": "selfbothlx",
   "version": "1.0.0",
   "description": "SelfbotWhatsapp",
   "main": "index.js",
@@ -28,15 +28,20 @@
   "homepage": "https://github.com/Ahmadzakix/selfbotHLX#readme",
   "dependencies": {
     "@adiwajshing/baileys": "github:adiwajshing/baileys",
+    "ansi": "^0.3.1",
     "async": "^2.4.1",
     "axios": "^0.21.1",
+    "brainly-scraper": "^1.0.3",
     "cfonts": "^2.9.0",
     "dotenv": "^8.2.0",
     "escape-string-regexp": "^1.0.5",
     "fake-useragent": "^1.0.1",
+    "figlet": "^1.5.0",
     "fluent-ffmpeg": "^2.1.2",
     "image-to-base64": "^2.1.1",
     "imgbb-uploader": "^1.3.0",
+    "lolcat": "^1.0.0",
+    "lolcatjs": "^2.4.1",
     "moment-timezone": "^0.5.32",
     "multistream": "^2.1.0",
     "needle": "^2.5.2",
@@ -49,8 +54,7 @@
     "request": "^2.81.0",
     "spinnies": "^0.5.1",
     "tiktok-scraper": "^1.4.7",
-    "ytdl-core": "^4.4.0",
-    "brainly-scraper": "^1.0.3"
+    "ytdl-core": "^4.4.0"
   },
   "devDependencies": {}
 }
