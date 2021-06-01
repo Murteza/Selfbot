@@ -51,6 +51,7 @@ publik = false
 fake = setting.fake
 targetprivate = ''
 blocked = []
+prefix = setting.prefix
 banChat = true
 alasanoff = 'Tidur'
 lol = setting.lol
