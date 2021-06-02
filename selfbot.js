@@ -363,18 +363,19 @@ _*Rafizqi-Self*_`)
 _*Rafizqi-Self*_`)
 	}
 	}
-		colors = ['red', 'white', 'black', 'blue', 'yellow', 'green']
-		const isMedia = (type === 'imageMessage' || type === 'videoMessage')
-		const isQuotedImage = type === 'extendedTextMessage' && content.includes('imageMessage')
-		const isQuotedVideo = type === 'extendedTextMessage' && content.includes('videoMessage')
-		const isQuotedAudio = type === 'extendedTextMessage' && content.includes('audioMessage')
-		const isQuotedSticker = type === 'extendedTextMessage' && content.includes('stickerMessage')
-		if (!isGroup && isCmd) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mEXEC\x1b[1;37m]', time, color(command), 'from', color(sender.split('@')[0]), 'args :', color(args.length))
-		if (!isGroup && !isCmd) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mRECV\x1b[1;37m]', time, color('Message'), 'from', color(sender.split('@')[0]), 'args :', color(args.length))
-		if (isCmd && isGroup) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mEXEC\x1b[1;37m]', time, color(command), 'from', color(sender.split('@')[0]), 'in', color(groupName), 'args :', color(args.length))
-		if (!isCmd && isGroup) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mRECV\x1b[1;37m]', time, color('Message'), 'from', color(sender.split('@')[0]), 'in', color(groupName), 'args :', color(args.length))
+/**************COLORS*****************/
+			colors = ['red','white','black','blue','yellow','green']
+			const isMedia = (type === 'imageMessage' || type === 'videoMessage')
+			const isQuotedImage = type === 'extendedTextMessage' && content.includes('imageMessage')
+      const isQuotedAudio = type === 'extendedTextMessage' && content.includes('audioMessage')
+			const isQuotedVideo = type === 'extendedTextMessage' && content.includes('videoMessage')
+			const isQuotedSticker = type === 'extendedTextMessage' && content.includes('stickerMessage')
+			if (!isGroup && isCmd) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mZAKI EXEC\x1b[1;37m]', time, color(command), 'from', color(sender.split('@')[0]), 'args :', color(args.length))
+			if (!isGroup && !isCmd) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;31mZAKI RECV\x1b[1;37m]', time, color('Message'), 'from', color(pushname), 'args :', color(args.length))
+			if (isCmd && isGroup) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mZAKI EXEC\x1b[1;37m]', time, color(command), 'from', color(sender.split('@')[0]), 'in', color(groupName), 'args :', color(args.length))
+			if (!isCmd && isGroup) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;31mZAKI RECV\x1b[1;37m]', time, color('Message'), 'from', color(pushname), 'in', color(groupName), 'args :', color(args.length))
 		
-          switch (command) {
+          switch(command){
 			
           case 'help':
           case 'menu':
