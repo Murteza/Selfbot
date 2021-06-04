@@ -59,9 +59,9 @@ zeks = setting.zeks
 imgbb_key = setting.imgbb_key
 const vcard = 'BEGIN:VCARD\n'  // Jan diubah,Ntar Error
             + 'VERSION:3.0\n'  // Jan diubah,Ntar Error
-            + 'FN:Ahmadzaki\n'  // Ganti jadi namamu
-            + 'ORG: PEMBUAT SELFBOT;\n'  // Ganti jadi namamu/Botmu
-            + 'TEL;type=CELL;type=VOICE;waid=6283873394995:+6283873394995\n'  // Ganti jadi nomormu, tapi jangan ubah pomekya
+            + 'FN:Murteza\n'  // Ganti jadi namamu
+            + 'ORG: Murteza;\n'  // Ganti jadi namamu/Botmu
+            + 'TEL;type=CELL;type=VOICE;waid=6281336141029:+6281336141029\n'  // Ganti jadi nomormu, tapi jangan ubah pomekya
             + 'END:VCARD' // Jan diubah,Ntar Error
 
 //*************FUNTION****************//
